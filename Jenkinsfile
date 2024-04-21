@@ -1,12 +1,12 @@
 pipeline {
     agent any
     
-    // stages {
-    //     stage('Build') {
-    //         steps {
-    //             echo 'Building the code using Maven.' 
-    //         }
-    //     }
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building the code using Maven.' 
+            }
+        }
     //     stage('Unit and Integration Tests') {
     //         steps {
     //             echo 'Running unit tests with JavaUnit...' 
@@ -38,21 +38,21 @@ pipeline {
     //             echo 'Deploying application to production server (e.g., using AWS tools)...'
     //         }
     //     }
-    // }
+      }
 
     // Post-build actions for email notifications (configure SMTP server details)
     post {
         success {
-            emailaction(recipient: 'testg3758@gmail.com', 
-                        subject: 'Pipeline Success - Build # ${currentBuild.number}', 
-                        body: 'The pipeline has successfully completed all stages. Build logs are attached.', 
-                        attachBuildLog: true)
+            mail to: "testg3758@gmail.com",
+                subject: " Pipeline Success - Build",
+                body: 'The pipeline has successfully completed all stages. Build logs are attached.', 
+                attachBuildLog: true
         }
         failure {
-            emailaction(recipient: 'testg3758@gmail.com', 
-                        subject: 'Pipeline Failure - Build # ${currentBuild.number}', 
-                        body: 'The pipeline has failed at stage ${currentStage.name}. Build logs are attached.', 
-                        attachBuildLog: true)
+                   mail to: "testg3758@gmail.com",
+                        subject: "Pipeline Failure - Build ", 
+                        body: "The pipeline has failed at stage ${currentStage.name}. Build logs are attached.", 
+                        attachBuildLog: true
         }
     }
 }
