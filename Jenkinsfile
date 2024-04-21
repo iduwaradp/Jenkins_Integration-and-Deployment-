@@ -7,13 +7,28 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building the code using Maven.' 
+                echo 'Dependacy Instrallation...' 
+                echo 'Building the application..' 
+                git branch: 'main',url: 'https://github.com/iduwaradp/Jenkins_Integration-and-Deployment-.git'
             }
         }
         stage('Unit and Integration Tests') {
             steps {
                 echo 'Running unit tests with JavaUnit...' 
-                echo 'Running integration tests with Selenium...' 
+               script{
+                   def emailScript - """
+                   \$SMTPServer - "stmp.gmail.com"
+                    \$SMTPFrom -"iduwaradp@gmail.com"
+                     \$SMTPTo -"iduwaradp@gmail.com"
+                      \$SMTPSubject - "Test passed"
+                       \$SMTPBody - "The test phase has passed"
+                        \$SMTPUsername -"iduwaradp@gmail.com"
+                         \$SMTPassword -
+                         
+                         Send-MaliMassage -From \$SMTPFrom -To \$SMTPTo -Subject \$SMTPSubject -Body \$SMTPBody -SmtpServer  \$SMTPServer
+                         """
+                         powershwll(emailscript)
+               }
             }
         }
         stage('Code Analysis') {
@@ -24,6 +39,20 @@ pipeline {
         stage('Security Scan') {
             steps {
                 echo 'Scanning for vulnerabilities with SAST scanner..'
+                
+                script{
+                   def emailScript - """
+                   \$SMTPServer - "stmp.gmail.com"
+                    \$SMTPFrom -"iduwaradp@gmail.com"
+                     \$SMTPTo -"iduwaradp@gmail.com"
+                      \$SMTPSubject - "Test passed"
+                       \$SMTPBody - "The test phase has passed"
+                        \$SMTPUsername -"iduwaradp@gmail.com"
+                         \$SMTPassword -
+                         
+                         Send-MaliMassage -From \$SMTPFrom -To \$SMTPTo -Subject \$SMTPSubject -Body \$SMTPBody -SmtpServer  \$SMTPServer
+                         """
+                         powershwll(emailscript)
             }
         }
         stage('Deploy to Staging') {
@@ -38,24 +67,24 @@ pipeline {
         }
         stage('Deploy to Production') {
             steps {
-                echo 'Deploying application to production server (e.g., using AWS tools)...'
+                echo 'Deploying application to production server using AWS tools....'
             }
         }
     }
 
-    // Post-build actions for email notifications (configure SMTP server details)
+   // Post-build actions for email notifications (configure SMTP server details)
     post {
         success {
-            emailaction(recipient: 'iduwaradp@gmail.com', 
-                        subject: 'Pipeline Success - Build # ${currentBuild.number}', 
-                        body: 'The pipeline has successfully completed all stages. Build logs are attached.', 
-                        attachBuildLog: true)
+            emailext subject: 'Pipeline Failure - Build # ${currentBuild.number}', 
+                        body: 'The pipeline has failed at stage ${currentStage.name}. Build logs are attached.', 
+                        to: 'iduwaradp@gmail.com', 
+                        attachBuildLog: true
         }
         failure {
-            emailaction(recipient: 'iduwaradp@gmail.com', 
-                        subject: 'Pipeline Failure - Build # ${currentBuild.number}', 
+            emailext subject: 'Pipeline Failure - Build # ${currentBuild.number}', 
                         body: 'The pipeline has failed at stage ${currentStage.name}. Build logs are attached.', 
-                        attachBuildLog: true)
+                        to: 'iduwaradp@gmail.com', 
+                        attachBuildLog: true
         }
-    }
+     }
 }
