@@ -1,61 +1,49 @@
 pipeline {
     agent any
-    
+
+    environment {
+        DIRECTORY_PATH = 'C:/Users/DELL/OneDrive/Desktop/deakin learning/sem 1/sit223'
+        TESTING_ENVIRONMENT = 'testing_environment'
+        PRODUCTION_ENVIRONMENT = "INDUWARA MUTHUGALA" 
+    }
+
     stages {
         stage('Build') {
             steps {
-                echo 'Building the code using Maven.' 
+                echo 'Fetching source code from the directory path specified by the environment variable.'
+
+                echo 'Compiling the code and generating any necessary artifacts.'
             }
         }
-        stage('Unit and Integration Tests') {
+        stage('Test') {
             steps {
-                echo 'Running unit tests with JavaUnit...' 
-                echo 'Running integration tests with Selenium...' 
+                echo ' unit tests...'
+                echo ' integration tests...'
             }
         }
-        stage('Code Analysis') {
+        stage('Code Quality Check') {
             steps {
-                echo 'Analyzing code quality with SonarQube...' 
+                echo 'Checking the quality of the code...'
             }
         }
-        stage('Security Scan') {
+        stage('Deploy') {
             steps {
-                echo 'Scanning for vulnerabilities with SAST scanner..'
+                echo "Deploying the application to ${TESTING_ENVIRONMENT} ..."
             }
         }
-        stage('Deploy to Staging') {
+        stage('Approval') {
             steps {
-                echo 'Deploying application to staging server using AWS..'
-            }
-        }
-        stage('Integration Tests on Staging') {
-            steps {
-                echo 'Running integration tests on staging environment...'
+                echo 'Waiting for manual approval...'
+                script{
+                     sleep time: 10, unit: 'SECONDS'
+                }
             }
         }
         stage('Deploy to Production') {
             steps {
-                echo 'Deploying application to production server (e.g., using AWS tools)...'
+                echo "Deploying the code to ${PRODUCTION_ENVIRONMENT} environment..."
             }
         }
     }
-
- post {
-    success {
-      emailaction(
-        recipient: 'testg3758@gmail.com', 
-        subject: 'Pipeline Success - Build # ${currentBuild.number}',
-        body: 'The pipeline has successfully completed all stages. Build logs are attached.',
-        attachBuildLog: true
-      )
-    }
-    failure {
-      emailaction(
-        recipient: 'testg3758@gmail.com', 
-        subject: 'Pipeline Failure - Build # ${currentBuild.number}',
-        body: 'The pipeline has failed at stage ${currentStage.name}. Build logs are attached.',
-        attachBuildLog: true
-      )
-    }
-  }
+}
 
