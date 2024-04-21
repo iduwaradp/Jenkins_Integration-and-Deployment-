@@ -48,7 +48,7 @@ pipeline {
                 to: "testg3758@gmail.com",
                 subject: "Pipeline Success - Build # ${currentBuild.number}",
                 body: "The pipeline has successfully completed all stages. Build logs are attached.",
-                attachLog: 'build.log'
+             
             )
         }
         failure {
@@ -56,7 +56,7 @@ pipeline {
                 to: "testg3758@gmail.com",
                 subject: "Pipeline Failure - Build # ${currentBuild.number}",
                 body: "The pipeline has failed at stage ${env.STAGE_NAME}. Build logs are attached.",
-                attachLog: 'build.log'
+              
             )
         }
     }
