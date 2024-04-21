@@ -41,18 +41,18 @@ pipeline {
     }
 
    
-    // post {
-    //     success {
-    //         emailaction(recipient: 'testg3758@gmail.com', 
-    //                     subject: 'Pipeline Success - Build # ${currentBuild.number}', 
-    //                     body: 'The pipeline has successfully completed all stages. Build logs are attached.', 
-    //                     attachBuildLog: true)
-    //     }
-    //     failure {
-    //         emailaction(recipient: 'testg3758@gmail.com', 
-    //                     subject: 'Pipeline Failure - Build # ${currentBuild.number}', 
-    //                     body: 'The pipeline has failed at stage ${currentStage.name}. Build logs are attached.', 
-    //                     attachBuildLog: true)
-    //     }
-    // }
+    post {
+        success {
+            emailaction(recipient: 'testg3758@gmail.com', 
+                        subject: 'Pipeline Success - Build # ${currentBuild.number}', 
+                        body: 'The pipeline has successfully completed all stages. Build logs are attached.', 
+                        attachBuildLog: true)
+        }
+        failure {
+            emailaction(recipient: 'testg3758@gmail.com', 
+                        subject: 'Pipeline Failure - Build # ${currentBuild.number}', 
+                        body: 'The pipeline has failed at stage ${currentStage.name}. Build logs are attached.', 
+                        attachBuildLog: true)
+        }
+    }
 }
