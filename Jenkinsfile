@@ -1,35 +1,34 @@
 pipeline {
     agent any
 
-    environment {
-        // Add environment variables here if needed
-    }
+ //   environment {
+  //  }
 
     stages {
         stage('Build') {
             steps {
-                echo 'Building the code using Maven...' // Replace with your chosen build tool (e.g., Gradle, Ant)
+                echo 'Building the code using Maven.' 
             }
         }
         stage('Unit and Integration Tests') {
             steps {
-                echo 'Running unit tests with JUnit...'  // Replace with your chosen test framework
-                echo 'Running integration tests with Selenium...' // Replace with your chosen integration testing tool
+                echo 'Running unit tests with JavaUnit...' 
+                echo 'Running integration tests with Selenium...' 
             }
         }
         stage('Code Analysis') {
             steps {
-                echo 'Analyzing code quality with SonarQube...'  // Replace with your chosen code analysis tool
+                echo 'Analyzing code quality with SonarQube...' 
             }
         }
         stage('Security Scan') {
             steps {
-                echo 'Scanning for vulnerabilities with SAST scanner (e.g., OWASP ZAP)...'  // Replace with your chosen security scanner
+                echo 'Scanning for vulnerabilities with SAST scanner..'
             }
         }
         stage('Deploy to Staging') {
             steps {
-                echo 'Deploying application to staging server (e.g., using AWS tools)...'
+                echo 'Deploying application to staging server using AWS..'
             }
         }
         stage('Integration Tests on Staging') {
@@ -47,13 +46,13 @@ pipeline {
     // Post-build actions for email notifications (configure SMTP server details)
     post {
         success {
-            emailaction(recipient: 'youremail@example.com', 
+            emailaction(recipient: 'iduwaradp@gmail.com', 
                         subject: 'Pipeline Success - Build # ${currentBuild.number}', 
                         body: 'The pipeline has successfully completed all stages. Build logs are attached.', 
                         attachBuildLog: true)
         }
         failure {
-            emailaction(recipient: 'youremail@example.com', 
+            emailaction(recipient: 'iduwaradp@gmail.com', 
                         subject: 'Pipeline Failure - Build # ${currentBuild.number}', 
                         body: 'The pipeline has failed at stage ${currentStage.name}. Build logs are attached.', 
                         attachBuildLog: true)
