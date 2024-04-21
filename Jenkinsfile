@@ -42,16 +42,10 @@ pipeline {
   
     post {
         success {
-                mail  to: "testg3758@gmail.com",
-                      subject: "Pipeline Success - Build # ${currentBuild.number}",
-                      body: "The pipeline has successfully completed all stages. Build logs are attached.",
-                      attachLog: true
+            emailext attachLog: true, body: 'The pipeline has successfully completed all stages. Build logs are attached.', subject: 'Pipeline Success - Build # ${currentBuild.number}', to: 'testg3758@gmail.com'
         }
         failure {
-            emailext  to: "testg3758@gmail.com",
-                      subject: "Pipeline Failure - Build # ${currentBuild.number}",
-                      body: "The pipeline has failed at stage ${currentStage.name}. Build logs are attached.",
-                      attachLog: true
+            emailext attachLog: true, body: 'The pipeline has failed at stage ${currentStage.name}. Build logs are attached.', replyTo: 'testg3758@gmail.com', subject: 'Pipeline Failure - Build # ${currentBuild.number}', to: 'testg3758@gmail.com'
         }
     }
 }
