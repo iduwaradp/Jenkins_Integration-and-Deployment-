@@ -1,4 +1,4 @@
-
+#!/usr/bin/env groovy
 
 pipeline {
     agent any
@@ -13,20 +13,6 @@ pipeline {
             steps {
                 echo 'Running unit tests with JavaUnit...' 
                 echo 'Running integration tests with Selenium...' 
-                script {
-                    def emailScript = """
-                    \$SMTPServer = "stmp.gmail.com"
-                    \$SMTPFrom = "testg3758@gmail.com"
-                    \$SMTPTo = "testg3758@gmail.com"
-                    \$SMTPSubject = "Test passed"
-                    \$SMTPBody = "The test phase has passed"
-                    \$SMTPUsername = "testg3758@gmail.com"
-                    \$SMTPassword = "fcvw urli aslv egui"
-                    
-                    Send-MailMessage -From \$SMTPFrom -To \$SMTPTo -Subject \$SMTPSubject -Body \$SMTPBody -SmtpServer \$SMTPServer
-                    """
-                    powershell(emailScript)
-                }
             }
         }
         stage('Code Analysis') {
@@ -37,20 +23,6 @@ pipeline {
         stage('Security Scan') {
             steps {
                 echo 'Scanning for vulnerabilities with SAST scanner..'
-                script {
-                    def emailScript = """
-                    \$SMTPServer = "stmp.gmail.com"
-                    \$SMTPFrom = "testg3758@gmail.com"
-                    \$SMTPTo = "testg3758@gmail.com"
-                    \$SMTPSubject = "Test passed"
-                    \$SMTPBody = "The test phase has passed"
-                    \$SMTPUsername = "testg3758@gmail.com"
-                    \$SMTPassword = "fcvw urli aslv egui"
-                    
-                    Send-MailMessage -From \$SMTPFrom -To \$SMTPTo -Subject \$SMTPSubject -Body \$SMTPBody -SmtpServer \$SMTPServer
-                    """
-                    powershell(emailScript)
-                }
             }
         }
         stage('Deploy to Staging') {
@@ -72,10 +44,21 @@ pipeline {
   
     post {
         success {
-            emailext attachLog: true, body: 'The pipeline has successfully completed all stages. Build logs are attached.', replyTo: 'testg3758@gmail.com', subject: 'Pipeline Success - Build # ${currentBuild.number}', to: 'testg3758@gmail.com'
+            emailext (
+                to: "testg3758@gmail.com",
+                subject: "Pipeline Success - Build # ${currentBuild.number}",
+                body: "The pipeline has successfully completed all stages. Build logs are attached.",
+                attachLog: 'build.log'
+            )
         }
         failure {
-            emailext attachLog: true, body: 'The pipeline has failed at stage ${currentStage.name}. Build logs are attached.', replyTo: 'testg3758@gmail.com', subject: 'Pipeline Failure - Build # ${currentBuild.number}', to: 'testg3758@gmail.com'
+            emailext (
+                to: "testg3758@gmail.com",
+                subject: "Pipeline Failure - Build # ${currentBuild.number}",
+                body: "The pipeline has failed at stage ${env.STAGE_NAME}. Build logs are attached.",
+                attachLog: 'build.log'
+            )
         }
     }
 }
+
