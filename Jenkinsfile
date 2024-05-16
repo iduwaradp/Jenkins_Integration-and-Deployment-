@@ -3,22 +3,36 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                // No build step needed for HTML/CSS
-                echo 'Building HTML/CSS project' 
+                checkout scm 
+                sh 'mvn clean package'
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
             }
         }
         stage('Test') {
             steps {
-                // Run tests (e.g., using a testing framework like Cypress)
-                echo 'Running tests' 
+                sh 'mvn test'
+            }
+        }
+        stage('Code Quality Analysis') {
+            steps {
+                sh 'mvn sonar:sonar' 
             }
         }
         stage('Deploy') {
             steps {
-                // Deploy to a web server (e.g., using a script or a tool like rsync)
-                echo 'Deploying to test server' 
+                sh 'docker build -t my-app:latest .'
+                sh 'docker-compose up -d'
+            }
+        }
+        stage('Release') {
+            steps {
+                sh 'aws codedeploy deploy'
+            }
+        }
+        stage('Monitoring and Alerting') {
+            steps {
+                // Datadog configuration
             }
         }
     }
 }
-
